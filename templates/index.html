@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Study group</title>
+</head>
+
+<body>
+  <h1>Study group</h1>
+  {% if session.username %}
+  <p>
+    You are logged in as {{ session.username }}
+  </p>
+  <p>
+    <a href="/logout">Logout</a>
+  </p>
+  {% else %}
+  <a href="/login">Login</a>
+  <a href="/register">Register</a>
+  {% endif %}
+</body>
+
+</html>
