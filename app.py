@@ -42,11 +42,14 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        sql = "SELECT password_hash FROM users WHERE username = ?"
-        password_hash = db.query(sql, [username])[0][0]
+        sql = "SELECT id, password_hash FROM users WHERE username = ?"
+        result = db.query(sql, [username])[0]
+        user_id = result["id"]
+        password_hash = result["password_hash"]
 
         if check_password_hash(password_hash, password):
             session["username"] = username
+            session["user_id"] = user_id
             return redirect("/")
         else:
             return "ERROR: wrong username or password"
@@ -54,4 +57,27 @@ def login():
 @app.route("/logout")
 def logout():
     del session["username"]
+    del session["user_id"]
     return redirect("/")
+
+@app.route("/create_group", methods=["GET", "POST"])
+def create_group():
+    if request.method == "GET":
+        return render_template("create_group.html")
+
+    if request.method == "POST":
+        group_name = request.form["group_name"]
+        description = request.form["description"]
+        max_members = request.form["max_members"]
+        subject = request.form["subject"]
+
+        sql = """INSERT INTO groups (group_name, description, max_members, subject, owner)
+            VALUES (?, ?, ?, ?, ?)"""
+        group_id = db.execute(sql, [group_name, description, max_members, subject, session["user_id"]])
+        add_member(session["user_id"], group_id)
+
+        return redirect("/")
+
+def add_member(user_id, group_id):
+    sql = "INSERT INTO users_groups (user_id, group_id) VALUES (?, ?)"
+    db.execute(sql, [user_id, group_id])
