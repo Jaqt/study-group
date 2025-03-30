@@ -4,6 +4,7 @@ from flask import redirect, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import db
+import groups
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -71,13 +72,16 @@ def create_group():
         max_members = request.form["max_members"]
         subject = request.form["subject"]
 
-        sql = """INSERT INTO groups (group_name, description, max_members, subject, owner)
-            VALUES (?, ?, ?, ?, ?)"""
-        group_id = db.execute(sql, [group_name, description, max_members, subject, session["user_id"]])
-        add_member(session["user_id"], group_id)
+        groups.create_group(group_name, description, max_members, subject, session["user_id"])
 
         return redirect("/")
 
-def add_member(user_id, group_id):
-    sql = "INSERT INTO users_groups (user_id, group_id) VALUES (?, ?)"
-    db.execute(sql, [user_id, group_id])
+@app.route("/groups")
+def list_groups():
+    all_groups = groups.get_groups()
+    return render_template("/groups.html", groups = all_groups)
+
+@app.route("/view/group_id=<int:group_id>")
+def view_group(group_id):
+    group_data, members = groups.get_group(group_id)
+    return render_template("group_page.html", group = group_data, members = members)
