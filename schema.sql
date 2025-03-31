@@ -10,7 +10,7 @@ CREATE TABLE groups (
     description TEXT,
     max_members INTEGER,
     subject TEXT,
-    owner INTEGER REFERENCES users;
+    owner INTEGER REFERENCES users
 );
 
 CREATE TABLE users_groups(
