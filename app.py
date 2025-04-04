@@ -75,6 +75,18 @@ def create_group():
         groups.create_group(group_name, description, max_members, subject, session["user_id"])
 
         return redirect("/")
+    
+@app.route("/update_group", methods=["POST"])
+def update_group():
+    group_id = request.form["group_id"]
+    group_name = request.form["group_name"]
+    description = request.form["description"]
+    max_members = request.form["max_members"]
+    subject = request.form["subject"]
+
+    groups.update_group(group_id, group_name, description, max_members, subject)
+
+    return redirect("/view/group_id=" + str(group_id))
 
 @app.route("/groups")
 def list_groups():
@@ -85,3 +97,8 @@ def list_groups():
 def view_group(group_id):
     group_data, members = groups.get_group(group_id)
     return render_template("group_page.html", group = group_data, members = members)
+
+@app.route("/edit/group_id=<int:group_id>")
+def edit_group(group_id):
+    group_data, members = groups.get_group(group_id)
+    return render_template("edit_group.html", group = group_data, members = members)

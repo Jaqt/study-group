@@ -7,6 +7,11 @@
 
 <body>
   <h1>{{ group.group_name }}</h1>
+  {% if session.user_id == group.owner %}
+  <p>
+    <a href="/edit/group_id={{group.id}}">Edit group</a>
+  </p>
+  {% endif %}
   <p>
     {{ group.description }}
   </p>

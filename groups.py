@@ -10,7 +10,9 @@ def get_group(group_id):
     sql = """SELECT groups.group_name,
                     groups.description,
                     groups.max_members,
-                    groups.subject
+                    groups.subject,
+                    groups.owner,
+                    groups.id
             FROM groups
             WHERE groups.id = ?"""
     group_data = db.query(sql, [group_id])[0]
@@ -33,3 +35,12 @@ def create_group(group_name, description, max_members, subject, user_id):
 def add_member(user_id, group_id):
     sql = "INSERT INTO users_groups (user_id, group_id) VALUES (?, ?)"
     db.execute(sql, [user_id, group_id])
+
+# update group
+def update_group(group_id, group_name, description, max_members, subject):
+    sql = """UPDATE groups SET group_name = ?,
+                               description = ?,
+                               max_members = ?,
+                               subject = ?
+                            WHERE id = ?"""
+    db.execute(sql, [group_name, description, max_members, subject, group_id])
