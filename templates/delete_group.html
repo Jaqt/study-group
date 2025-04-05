@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Delete your group</title>
+</head>
+
+<body>
+  <h1>Delete your group</h1>
+  <p>
+    You are about to <b>delete</b> your group...
+  </p>
+  <h2>Are you sure?</h2>
+  <form action="/delete_group" method="post">
+    <p>
+      <input type="submit" name="delete" value="Yes, I am sure"/>
+      <input type="submit" name="cancel" value="Cancel"/>
+      <input type="hidden" name="group_id" value="{{ group_id }}"/>
+    </p>
+  </form>
+</body>
+
+</html>

@@ -9,7 +9,8 @@
   <h1>{{ group.group_name }}</h1>
   {% if session.user_id == group.owner %}
   <p>
-    <a href="/edit/group_id={{group.id}}">Edit group</a>
+    <a href="/edit/group_id={{ group.id }}">Edit group</a>
+    <a href="/delete/group_id={{ group.id }}">Delete group</a>
   </p>
   {% endif %}
   <p>

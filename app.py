@@ -88,6 +88,15 @@ def update_group():
 
     return redirect("/view/group_id=" + str(group_id))
 
+@app.route("/delete_group", methods=["POST"])
+def delete_group():
+    group_id = request.form["group_id"]
+    if "delete" in request.form:
+        groups.delete_group(group_id)
+        return redirect("/")
+    
+    return redirect("/view/group_id=" + str(group_id))
+
 @app.route("/groups")
 def list_groups():
     all_groups = groups.get_groups()
@@ -102,3 +111,7 @@ def view_group(group_id):
 def edit_group(group_id):
     group_data, members = groups.get_group(group_id)
     return render_template("edit_group.html", group = group_data, members = members)
+
+@app.route("/delete/group_id=<int:group_id>")
+def remove_group(group_id):
+    return render_template("delete_group.html", group_id=group_id)

@@ -44,3 +44,8 @@ def update_group(group_id, group_name, description, max_members, subject):
                                subject = ?
                             WHERE id = ?"""
     db.execute(sql, [group_name, description, max_members, subject, group_id])
+
+# delete group
+def delete_group(group_id):
+    sql = "DELETE FROM groups WHERE groups.id = ?"
+    db.execute(sql, [group_id])
