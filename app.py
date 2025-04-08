@@ -15,7 +15,7 @@ def index():
 
 @app.route("/register")
 def register():
-    return render_template("register.html")
+    return render_template("register.html", filled={})
 
 @app.route("/create_account", methods=["POST"])
 def create_account():

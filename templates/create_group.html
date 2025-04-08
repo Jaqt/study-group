@@ -10,19 +10,19 @@
   <form action="/create_group" method="post">
     <p>
       Group name: <br />
-      <input type="text" name="group_name" />
+      <input type="text" name="group_name" required/>
     </p>
     <p>
       Description: <br />
-      <textarea name="description" rows="8" cols="50"></textarea>
+      <textarea name="description" rows="8" cols="50" required></textarea>
     </p>
     <p>
       Maximum number of members (1-32): <br />
-      <input type="number" name="max_members" min="1" max="32">
+      <input type="number" name="max_members" min="1" max="32" required>
     </p>
     <p>
       Subject: <br />
-      <select name="subject">
+      <select name="subject" required>
         <option value="tira">tira</option>
         <option value="tikape">tikape</option>
         <option value="linis">linis</option>
