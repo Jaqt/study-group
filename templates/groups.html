@@ -1,20 +1,16 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Groups</title>
-</head>
+{% block title %}Groups{% endblock %}
 
-<body>
-  <h1>Groups</h1>
-  <ul>
-    {% for group in groups %}
-    <li><a href="/view/group_id={{ group.id }}">{{ group.group_name }}</a></li>
-    <p>{{ group.description }}</p>
-    {% endfor %}
-  </ul>
+{% block content %}
 
-</body>
+<h2>Groups</h2>
 
+<ul>
+  {% for group in groups %}
+  <li><a href="/view/group_id={{ group.id }}">{{ group.group_name }}</a></li>
+  <p>{{ group.description }}</p>
+  {% endfor %}
+</ul>
 
-</html>
+{% endblock %}

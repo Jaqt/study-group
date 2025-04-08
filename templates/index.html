@@ -1,27 +1,25 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Study group</title>
-</head>
+{% block title %}Study group{% endblock %}
 
-<body>
-  <h1>Study group</h1>
-  {% if session.username %}
-  <p>
-    You are logged in as {{ session.username }}
-  </p>
-  <p>
-    <a href="/create_group">Create a new group</a>
-    <a href="/groups">Look for groups</a>
-  </p>
-  <p>
-    <a href="/logout">Logout</a>
-  </p>
-  {% else %}
+{% block content %}
+
+{% if session.username %}
+<p>
+  You are logged in as {{ session.username }}
+</p>
+<p>
+  <a href="/create_group">Create a new group</a>
+  <a href="/groups">Look for groups</a>
+</p>
+<p>
+  <a href="/logout">Logout</a>
+</p>
+{% else %}
+<p>
   <a href="/login">Login</a>
   <a href="/register">Register</a>
-  {% endif %}
-</body>
+</p>
+{% endif %}
 
-</html>
+{% endblock %}

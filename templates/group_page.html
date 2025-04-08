@@ -1,30 +1,28 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>{{ group.group_name }}</title>
-</head>
+{% block title %}{{ group.group_name }}{% endblock %}
 
-<body>
-  <h1>{{ group.group_name }}</h1>
-  {% if session.user_id == group.owner %}
-  <p>
-    <a href="/edit/group_id={{ group.id }}">Edit group</a>
-    <a href="/delete/group_id={{ group.id }}">Delete group</a>
-  </p>
-  {% endif %}
-  <p>
-    {{ group.description }}
-  </p>
-  <h2>Members: </h2>
-  <li>
-    {% for member in members %}
-    <ul>{{ member.username }}</ul>
-    {% endfor %}
-  </li>
-  <p>
-    <a href="/groups">Go back</a>
-  </p>
-</body>
+{% block content %}
 
-</html>
+<h2>{{ group.group_name }}</h2>
+
+{% if session.user_id == group.owner %}
+<p>
+  <a href="/edit/group_id={{ group.id }}">Edit group</a>
+  <a href="/delete/group_id={{ group.id }}">Delete group</a>
+</p>
+{% endif %}
+<p>
+  {{ group.description }}
+</p>
+<h3>Members</h3>
+<li>
+  {% for member in members %}
+  <ul>{{ member.username }}</ul>
+  {% endfor %}
+</li>
+<p>
+  <a href="/groups">Go back</a>
+</p>
+
+{% endblock %}

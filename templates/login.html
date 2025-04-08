@@ -1,31 +1,30 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Login</title>
-</head>
+{% block title %}Log in{% endblock %}
 
-<body>
-  {% if session.username %}
+{% block content %}
+
+<h2>Log in</h2>
+
+{% if session.username %}
+<p>
+  You are logged in as {{ session.username }}
+</p>
+<p>
+  <a href="/logout">Logout</a>
+</p>
+{% else %}
+<form action="/login" method="post">
   <p>
-    You are logged in as {{ session.username }}
+    Username: <br />
+    <input type="text" name="username" required/>
   </p>
   <p>
-    <a href="/logout">Logout</a>
+    Password: <br />
+    <input type="password" name="password" required/>
   </p>
-  {% else %}
-  <form action="/login" method="post">
-    <p>
-      Username: <br />
-      <input type="text" name="username" required/>
-    </p>
-    <p>
-      Password: <br />
-      <input type="password" name="password" required/>
-    </p>
-    <input type="submit" value="Login" />
-  </form>
-  {% endif %}
-</body>
+  <input type="submit" value="Login" />
+</form>
+{% endif %}
 
-</html>
+{% endblock %}
