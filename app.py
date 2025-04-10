@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import flash, redirect, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import db
@@ -23,16 +23,21 @@ def create_account():
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        return "ERROR: passwords don't match"
+        flash("Passwords don't match", "warning")
+        filled = {"username": username}
+        return render_template("register.html", filled=filled)
     password_hash = generate_password_hash(password1)
 
     try:
         sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
         db.execute(sql, [username, password_hash])
     except sqlite3.IntegrityError:
-        return "ERROR: account name is already taken"
+        flash("Username is already taken", "warning")
+        filled = {"username": username}
+        return render_template("register.html", filled=filled)
 
-    return "Account created"
+    flash("Account creation successful, log in.", "success")
+    return redirect("/login")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -44,16 +49,20 @@ def login():
         password = request.form["password"]
 
         sql = "SELECT id, password_hash FROM users WHERE username = ?"
-        result = db.query(sql, [username])[0]
-        user_id = result["id"]
-        password_hash = result["password_hash"]
+        result = db.query(sql, [username])
+        if not result:
+            flash("Wrong username or password", "warning")
+            return render_template("login.html")
+        user_id = result[0]["id"]
+        password_hash = result[0]["password_hash"]
 
         if check_password_hash(password_hash, password):
             session["username"] = username
             session["user_id"] = user_id
             return redirect("/")
         else:
-            return "ERROR: wrong username or password"
+            flash("Wrong username or password", "warning")
+            return render_template("login.html")
 
 @app.route("/logout")
 def logout():
@@ -73,9 +82,10 @@ def create_group():
         subject = request.form["subject"]
 
         groups.create_group(group_name, description, max_members, subject, session["user_id"])
+        group_id = db.last_insert_id()
 
-        return redirect("/")
-    
+        return redirect("/view/group_id=" + str(group_id))
+
 @app.route("/update_group", methods=["POST"])
 def update_group():
     group_id = request.form["group_id"]
@@ -84,8 +94,12 @@ def update_group():
     max_members = request.form["max_members"]
     subject = request.form["subject"]
 
+    if "cancel" in request.form:
+        return redirect("/view/group_id=" + str(group_id))
+
     groups.update_group(group_id, group_name, description, max_members, subject)
 
+    flash("Group information has been updated", "success")
     return redirect("/view/group_id=" + str(group_id))
 
 @app.route("/delete_group", methods=["POST"])
@@ -93,8 +107,9 @@ def delete_group():
     group_id = request.form["group_id"]
     if "delete" in request.form:
         groups.delete_group(group_id)
+        flash("Group has been successfully deleted", "success")
         return redirect("/")
-    
+
     return redirect("/view/group_id=" + str(group_id))
 
 @app.route("/groups")

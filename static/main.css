@@ -61,3 +61,11 @@ nav li:not(:first-of-type) {
 .page-nav {
   text-align: center;
 }
+
+.flash-warning {
+  color: red;
+}
+
+.flash-success {
+  color: green;
+}

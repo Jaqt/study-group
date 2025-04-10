@@ -4,6 +4,16 @@
 
 {% block content %}
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div>
+    {% for category, message in messages %}
+      <p class="flash-{{ category }}">{{ message }}</p>
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
 <h2>{{ group.group_name }}</h2>
 
 {% if session.user_id == group.owner %}
@@ -22,7 +32,7 @@
   {% endfor %}
 </li>
 <p>
-  <a href="/groups">Go back</a>
+  <a href="/groups">Back to groups</a>
 </p>
 
 {% endblock %}
