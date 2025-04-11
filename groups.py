@@ -24,7 +24,8 @@ def get_group(group_id):
                     groups.id
             FROM groups
             WHERE groups.id = ?"""
-    return db.query(sql, [group_id])[0]
+    result = db.query(sql, [group_id])
+    return result[0] if result else None
 
 # Get members of the group
 def get_members(group_id):
