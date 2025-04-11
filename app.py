@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import flash, redirect, render_template, request, session
+from flask import abort, flash, redirect, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import db
@@ -90,6 +90,10 @@ def create_group():
 @app.route("/update_group", methods=["POST"])
 def update_group():
     group_id = request.form["group_id"]
+    group, members = groups.get_group(group_id)
+    if group["owner"] != session["user_id"]:
+        abort(403)
+
     group_name = request.form["group_name"]
     description = request.form["description"]
     max_members = request.form["max_members"]
@@ -106,6 +110,10 @@ def update_group():
 @app.route("/delete_group", methods=["POST"])
 def delete_group():
     group_id = request.form["group_id"]
+    group, members = groups.get_group(group_id)
+    if group["owner"] != session["user_id"]:
+        abort(403)
+
     if "delete" in request.form:
         groups.delete_group(group_id)
         flash("Group has been successfully deleted", "success")
@@ -134,8 +142,13 @@ def view_group(group_id):
 @app.route("/edit/group_id=<int:group_id>")
 def edit_group(group_id):
     group_data, members = groups.get_group(group_id)
+    if group_data["owner"] != session["user_id"]:
+        abort(403)
     return render_template("edit_group.html", group=group_data, members=members)
 
 @app.route("/delete/group_id=<int:group_id>")
 def remove_group(group_id):
+    group_data, members = groups.get_group(group_id)
+    if group_data["owner"] != session["user_id"]:
+        abort(403)
     return render_template("delete_group.html", group_id=group_id)
