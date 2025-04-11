@@ -83,6 +83,7 @@ def create_group():
 
         groups.create_group(group_name, description, max_members, subject, session["user_id"])
         group_id = db.last_insert_id()
+        groups.add_member(session["user_id"], group_id)
 
         return redirect("/view/group_id=" + str(group_id))
 
@@ -112,20 +113,28 @@ def delete_group():
 
     return redirect("/view/group_id=" + str(group_id))
 
+@app.route("/search_group")
+def search_group():
+    query = request.args.get("query")
+    if not query:
+        query = ""
+    filter_groups = groups.filter_groups(query)
+    return render_template("/groups.html", groups=filter_groups, query=query)
+
 @app.route("/groups")
 def list_groups():
     all_groups = groups.get_groups()
-    return render_template("/groups.html", groups = all_groups)
+    return render_template("/groups.html", groups=all_groups)
 
 @app.route("/view/group_id=<int:group_id>")
 def view_group(group_id):
     group_data, members = groups.get_group(group_id)
-    return render_template("group_page.html", group = group_data, members = members)
+    return render_template("group_page.html", group=group_data, members=members)
 
 @app.route("/edit/group_id=<int:group_id>")
 def edit_group(group_id):
     group_data, members = groups.get_group(group_id)
-    return render_template("edit_group.html", group = group_data, members = members)
+    return render_template("edit_group.html", group=group_data, members=members)
 
 @app.route("/delete/group_id=<int:group_id>")
 def remove_group(group_id):

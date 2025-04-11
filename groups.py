@@ -5,6 +5,15 @@ def get_groups():
     sql = "SELECT id, group_name, description, subject FROM groups ORDER BY id DESC"
     return db.query(sql)
 
+# Get filtered groups by keywords
+def filter_groups(query):
+    sql = """SELECT id, group_name, description, subject
+            FROM groups
+            WHERE group_name LIKE ? OR description LIKE ?
+            ORDER BY id DESC"""
+    keywords = f"%{query}%"
+    return db.query(sql, [keywords, keywords])
+
 # Get group page
 def get_group(group_id):
     sql = """SELECT groups.group_name,
@@ -28,8 +37,7 @@ def get_group(group_id):
 def create_group(group_name, description, max_members, subject, user_id):
     sql = """INSERT INTO groups (group_name, description, max_members, subject, owner)
             VALUES (?, ?, ?, ?, ?)"""
-    group_id = db.execute(sql, [group_name, description, max_members, subject, user_id])
-    add_member(user_id, group_id)
+    db.execute(sql, [group_name, description, max_members, subject, user_id])
 
 # add member to a group
 def add_member(user_id, group_id):
