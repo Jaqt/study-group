@@ -24,14 +24,15 @@ def get_group(group_id):
                     groups.id
             FROM groups
             WHERE groups.id = ?"""
-    group_data = db.query(sql, [group_id])[0]
+    return db.query(sql, [group_id])[0]
 
+# Get members of the group
+def get_members(group_id):
     sql = """SELECT users.username
             FROM users, users_groups
             WHERE users.id = users_groups.user_id
             AND users_groups.group_id = ?"""
-    members = db.query(sql, [group_id])
-    return group_data, members
+    return db.query(sql, [group_id])
 
 # Create a group to db
 def create_group(group_name, description, max_members, subject, user_id):
