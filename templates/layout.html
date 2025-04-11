@@ -5,22 +5,25 @@
   <title>{% block title %}{% endblock %}</title>
   <link rel="stylesheet" href="/static/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
 </head>
 
 <body>
 
   <div class="header">
+    <a href="/" class="logo">
+      <img src="/static/logo.png" alt="logo">
+    </a>
     <nav>
-        <ul>
-          <li><a href="/" class="button">Study group</a></li>
-          {% if session.user_id %}
-          <li><a href="/logout" class="button">Log out</a></li>
-          {% else %}
-          <li><a href="/login" class="button">Log in</a></li>
-          <li><a href="/register" class="button">Register</a></li>
-          {% endif %}
-        </ul>
-      </nav>
+      <ul>
+        {% if session.user_id %}
+        <li><a href="/logout" class="button">Log out</a></li>
+        {% else %}
+        <li><a href="/login" class="button">Log in</a></li>
+        <li><a href="/register" class="button">Register</a></li>
+        {% endif %}
+      </ul>
+    </nav>
   </div>
 
   <div class="content">
