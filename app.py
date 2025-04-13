@@ -2,12 +2,22 @@ import sqlite3
 from flask import Flask
 from flask import abort, flash, redirect, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
 import config
 import db
 import groups
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user_id" not in session:
+            flash("You need to be logged in to access this page", "warning")
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route("/")
 def index():
@@ -66,11 +76,13 @@ def login():
 
 @app.route("/logout")
 def logout():
-    del session["username"]
-    del session["user_id"]
+    if "user_id" in session:
+        del session["username"]
+        del session["user_id"]
     return redirect("/")
 
 @app.route("/create_group", methods=["GET", "POST"])
+@login_required
 def create_group():
     if request.method == "GET":
         return render_template("create_group.html")
@@ -88,6 +100,7 @@ def create_group():
         return redirect("/view/group_id=" + str(group_id))
 
 @app.route("/update_group", methods=["POST"])
+@login_required
 def update_group():
     group_id = request.form["group_id"]
     group = groups.get_group(group_id)
@@ -110,6 +123,7 @@ def update_group():
     return redirect("/view/group_id=" + str(group_id))
 
 @app.route("/delete_group", methods=["POST"])
+@login_required
 def delete_group():
     group_id = request.form["group_id"]
     group = groups.get_group(group_id)
@@ -139,6 +153,7 @@ def list_groups():
     return render_template("/groups.html", groups=all_groups)
 
 @app.route("/view/group_id=<int:group_id>")
+@login_required
 def view_group(group_id):
     group_data = groups.get_group(group_id)
     if not group_data:
@@ -147,6 +162,7 @@ def view_group(group_id):
     return render_template("group_page.html", group=group_data, members=members)
 
 @app.route("/edit/group_id=<int:group_id>")
+@login_required
 def edit_group(group_id):
     group_data = groups.get_group(group_id)
     if not group_data:
@@ -156,6 +172,7 @@ def edit_group(group_id):
     return render_template("edit_group.html", group=group_data)
 
 @app.route("/delete/group_id=<int:group_id>")
+@login_required
 def remove_group(group_id):
     group_data = groups.get_group(group_id)
     if not group_data:
