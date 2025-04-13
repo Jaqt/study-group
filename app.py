@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import config
 import db
-import groups
+import groups, users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -204,3 +204,14 @@ def remove_group(group_id):
     if group_data["owner"] != session["user_id"]:
         abort(403)
     return render_template("delete_group.html", group_id=group_id)
+
+@app.route("/view/user_id=<int:user_id>")
+@login_required
+def view_user(user_id):
+    user = users.get_user(user_id)
+    if not user:
+        abort(404)
+    owner = users.get_owner(user_id)
+    groups = users.get_groups(user_id)
+    subjects = users.get_subjects(user_id)
+    return render_template("user_page.html", user=user, owner=owner, groups=groups, subjects=subjects)

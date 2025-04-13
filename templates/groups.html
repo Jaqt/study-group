@@ -7,12 +7,13 @@
 <h2>Groups</h2>
 
 {% if groups %}
-<ul>
+<dl>
   {% for group in groups %}
-  <li><a href="/view/group_id={{ group.id }}">{{ group.group_name }}</a></li>
-  <p>{{ group.description }}</p>
+  <dt><a href="/view/group_id={{ group.id }}">{{ group.group_name }}</a></dt>
+  <i>{{ group.subject }}</i>
+  <dd>{{ group.description }}</dd>
   {% endfor %}
-</ul>
+</dl>
 {% else %}
   {% if query %}
   <p>No matches found for your search, do you want to <a href="/create_group">create that group?</a></p>

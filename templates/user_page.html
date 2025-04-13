@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ user.username }} - Userprofile{% endblock %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div>
+    {% for category, message in messages %}
+      <p class="flash-{{ category }}">{{ message }}</p>
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<h1>Profile of {{ user.username }}</h1>
+
+<h2>Groups {{ user.username }} founded</h2>
+<ul style="list-style-type:none;">
+  {% for group in owner %}
+  <li><a href="/view/group_id={{ group.id }}">{{ group.group_name }}</a></li>
+  {% else %}
+  <p>No groups found</p>
+  {% endfor %}
+</ul>
+<h2>All {{ user.username}}'s groups</h2>
+<ul style="list-style-type:none;">
+  {% for group in groups %}
+  <li><a href="/view/group_id={{ group.id }}">{{ group.group_name }}</a></li>
+  {% else %}
+  <p>No groups found</p>
+  {% endfor %}
+</ul>
+<h2>Groups by subject</h2>
+<ul style="list-style-type:none;">
+  {% for subject, count in subjects %}
+  <li>{{ subject }} - {{ count }}</li>
+  {% else %}
+  <p>No subjects found</p>
+  {% endfor %}
+</ul>
+
+{% endblock %}

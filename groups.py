@@ -29,7 +29,7 @@ def get_group(group_id):
 
 # Get members of the group
 def get_members(group_id):
-    sql = """SELECT users.username
+    sql = """SELECT users.id, users.username
             FROM users, users_groups
             WHERE users.id = users_groups.user_id
             AND users_groups.group_id = ?"""

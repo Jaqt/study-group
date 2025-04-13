@@ -15,6 +15,7 @@
 {% endwith %}
 
 <h2>{{ group.group_name }}</h2>
+<i>{{ group.subject }}</i>
 
 {% if session.user_id == group.owner %}
 <p>
@@ -26,11 +27,11 @@
   {{ group.description }}
 </p>
 <h3>Members</h3>
-<li>
+<ul style="list-style-type:none;">
   {% for member in members %}
-  <ul>{{ member.username }}</ul>
+  <li><a href="/view/user_id={{ member.id }}">{{ member.username }}</a></li>
   {% endfor %}
-</li>
+</ul>
 <p>
   <a href="/groups">Back to groups</a>
 </p>
