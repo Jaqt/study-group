@@ -30,8 +30,12 @@ def register():
 @app.route("/create_account", methods=["POST"])
 def create_account():
     username = request.form["username"]
+    if not username or len(username) > 16:
+        abort(403)
     password1 = request.form["password1"]
     password2 = request.form["password2"]
+    if not password1 or len(password1) > 128:
+        abort(403)
     if password1 != password2:
         flash("Passwords don't match", "warning")
         filled = {"username": username}
@@ -56,7 +60,11 @@ def login():
 
     if request.method == "POST":
         username = request.form["username"]
+        if not username or len(username) > 16:
+            abort(403)
         password = request.form["password"]
+        if not password or len(password) > 128:
+            abort(403)
 
         sql = "SELECT id, password_hash FROM users WHERE username = ?"
         result = db.query(sql, [username])
@@ -89,9 +97,17 @@ def create_group():
 
     if request.method == "POST":
         group_name = request.form["group_name"]
+        if not group_name or len(group_name) > 50:
+            abort(403)
         description = request.form["description"]
+        if not description or len(description) > 1000:
+            abort(403)
         max_members = request.form["max_members"]
+        if not max_members or int(max_members) < 1 or int(max_members) > 32:
+            abort(403)
         subject = request.form["subject"]
+        if not groups.valid_subjects(subject):
+            abort(403)
 
         groups.create_group(group_name, description, max_members, subject, session["user_id"])
         group_id = db.last_insert_id()
@@ -110,9 +126,17 @@ def update_group():
         abort(403)
 
     group_name = request.form["group_name"]
+    if not group_name or len(group_name) > 50:
+            abort(403)
     description = request.form["description"]
+    if not description or len(description) > 1000:
+            abort(403)
     max_members = request.form["max_members"]
+    if not max_members or int(max_members) < 1 or int(max_members) > 32:
+            abort(403)
     subject = request.form["subject"]
+    if not groups.valid_subjects(subject):
+            abort(403)
 
     if "cancel" in request.form:
         return redirect("/view/group_id=" + str(group_id))

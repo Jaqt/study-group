@@ -9,12 +9,12 @@
 <form action="/update_group" method="post">
   <p>
     Group name: <br />
-    <input type="text" name="group_name" value="{{ group.group_name }}" required/>
+    <input type="text" name="group_name" value="{{ group.group_name }}" maxlength="50" required/>
     <input type="hidden" name="group_id" value="{{ group.id }}"/>
   </p>
   <p>
     Description: <br />
-    <textarea name="description" rows="8" cols="50" required>{{ group.description }}</textarea>
+    <textarea name="description" rows="8" cols="50" maxlength="1000" required>{{ group.description }}</textarea>
   </p>
   <p>
     Maximum number of members (1-32): <br />

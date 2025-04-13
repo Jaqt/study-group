@@ -41,6 +41,10 @@ def create_group(group_name, description, max_members, subject, user_id):
             VALUES (?, ?, ?, ?, ?)"""
     db.execute(sql, [group_name, description, max_members, subject, user_id])
 
+# Checks validity of users input and returns a boolean
+def valid_subjects(subject):
+    return subject in ["tira", "tikape", "linis", "lama"]
+
 # add member to a group
 def add_member(user_id, group_id):
     sql = "INSERT INTO users_groups (user_id, group_id) VALUES (?, ?)"
