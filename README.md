@@ -9,7 +9,7 @@
 - Käyttäjä pystyy valitsemaan ryhmälle yhden tai useamman luokittelun (esim. tietokannat, algoritmit, lineaarialgebra).
 - Käyttäjä pystyy liittymään opiskeluryhmiin. Ryhmän ilmoituksessa näytetään ryhmän jäsenet.
 
-# Toiminnallisuus - Välipalautus 2
+## Toiminnallisuus - Välipalautus 3
 
 Tavoitteena on, että sovelluksessa on ainakin seuraavat toiminnot:
 
@@ -17,8 +17,36 @@ Tavoitteena on, että sovelluksessa on ainakin seuraavat toiminnot:
 
 :white_check_mark: Käyttäjä pystyy lisäämään tietokohteita
 
-:white_square_button: Käyttäjä pystyy muokkaamaan ja poistamaan tietokohteita.
+:white_check_mark: Käyttäjä pystyy muokkaamaan ja poistamaan tietokohteita.
 
 :white_check_mark: Käyttäjä näkee sovellukseen lisätyt tietokohteet.
 
-:white_square_button: Käyttäjä pystyy etsimään tietokohteita hakusanalla tai muulla perusteella.
+:white_check_mark: Käyttäjä pystyy etsimään tietokohteita hakusanalla tai muulla perusteella.
+
+:white_check_mark: Sovelluksessa on käyttäjäsivut, jotka näyttävät tilastoja ja käyttäjän lisäämät tietokohteet.
+
+:white_check_mark: Käyttäjä pystyy valitsemaan tietokohteelle yhden tai useamman luokittelun. Mahdolliset luokat ovat tietokannassa.
+
+:white_square_button: Käyttäjä pystyy lähettämään toisen käyttäjän tietokohteeseen liittyen jotain lisätietoa, joka tulee näkyviin sovelluksessa.
+
+## Sovelluksen asennus
+
+Luo paikallinen repo komennolla `git clone git@github.com:Jaqt/study-group.git` ja siirry sen jälkeen hakemistoon.
+
+Asenna `flask`-kirjasto:
+
+```
+$ pip install flask
+```
+
+Luo tietokannan taulut:
+
+```
+$ sqlite3 database.db < schema.sql
+```
+
+Voit käynnistää sovelluksen näin:
+
+```
+$ flask run
+```
