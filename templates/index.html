@@ -19,21 +19,21 @@
   You are logged in as {{ session.username }}
 </p>
 <p>
-  <a href="/create_group">Create a new group</a>
+  <a href="/create_group">Create a new group</a> or 
   <a href="/groups">Look for groups</a>
-  <form class="search" action="/search_group">
-    <input type="text" name="query" placeholder="Search groups..." />
-    <button type="submit"><i class="fa fa-search"></i></button>
-  </form>
-</p>
-<p>
-  <a href="/logout">Logout</a>
 </p>
 {% else %}
+<h2>Welcome to Study group!</h2>
 <p>
-  <a href="/login">Login</a>
-  <a href="/register">Register</a>
+  This is a right platform for students to connect with peers, work on assignments or prep for exams!
+</p>
+<p>
+  Already have an account? <a href="/login">Log in</a> to join with your friends. New here? <a href="/register">Create an account</a> and get started!
 </p>
 {% endif %}
+<form class="search" action="/search_group">
+  <input type="text" name="query" placeholder="Search groups..." />
+  <button type="submit"><i class="fa fa-search"></i></button>
+</form>
 
 {% endblock %}
