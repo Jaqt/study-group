@@ -1,7 +1,5 @@
-import sqlite3
 from flask import Flask
 from flask import abort, flash, redirect, render_template, request, session
-from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import config
 import db
@@ -40,12 +38,8 @@ def create_account():
         flash("Passwords don't match", "warning")
         filled = {"username": username}
         return render_template("register.html", filled=filled)
-    password_hash = generate_password_hash(password1)
 
-    try:
-        sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
-        db.execute(sql, [username, password_hash])
-    except sqlite3.IntegrityError:
+    if not users.create_user(username, password1):
         flash("Username is already taken", "warning")
         filled = {"username": username}
         return render_template("register.html", filled=filled)
@@ -66,21 +60,14 @@ def login():
         if not password or len(password) > 128:
             abort(403)
 
-        sql = "SELECT id, password_hash FROM users WHERE username = ?"
-        result = db.query(sql, [username])
-        if not result:
+        user_id = users.check_login(username, password)
+        if not user_id:
             flash("Wrong username or password", "warning")
             return render_template("login.html")
-        user_id = result[0]["id"]
-        password_hash = result[0]["password_hash"]
 
-        if check_password_hash(password_hash, password):
-            session["username"] = username
-            session["user_id"] = user_id
-            return redirect("/")
-        else:
-            flash("Wrong username or password", "warning")
-            return render_template("login.html")
+        session["username"] = username
+        session["user_id"] = user_id
+        return redirect("/")
 
 @app.route("/logout")
 def logout():
