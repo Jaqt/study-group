@@ -16,7 +16,7 @@
 
 {% if session.username %}
 <p>
-  You are logged in as {{ session.username }}
+  You are logged in as <a href="/view/user_id={{ session.user_id }}">{{ session.username }}</a>
 </p>
 <p>
   <a href="/create_group">Create a new group</a> or 

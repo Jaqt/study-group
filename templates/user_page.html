@@ -15,15 +15,8 @@
 {% endwith %}
 
 <h1>Profile of {{ user.username }}</h1>
-
-<h2>Groups {{ user.username }} founded</h2>
-<ul style="list-style-type:none;">
-  {% for group in owner %}
-  <li><a href="/view/group_id={{ group.id }}">{{ group.group_name }}</a></li>
-  {% else %}
-  <p>No groups found</p>
-  {% endfor %}
-</ul>
+<p>Groups founded: {{ owner | count }}</p>
+<p>Member of {{ groups | count }} group{{ 's' if groups | count != 1 else '' }}</p>
 <h2>All {{ user.username}}'s groups</h2>
 <ul style="list-style-type:none;">
   {% for group in groups %}
@@ -35,7 +28,7 @@
 <h2>Groups by subject</h2>
 <ul style="list-style-type:none;">
   {% for subject, count in subjects %}
-  <li>{{ subject }} - {{ count }}</li>
+  <li>{{ subject }}: {{ count }}</li>
   {% else %}
   <p>No subjects found</p>
   {% endfor %}

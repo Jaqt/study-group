@@ -17,6 +17,7 @@
     <nav>
       <ul>
         {% if session.user_id %}
+        <li><a href="/view/user_id={{ session.user_id }}" class="button">My profile</a></li>
         <li><a href="/logout" class="button">Log out</a></li>
         {% else %}
         <li><a href="/login" class="button">Log in</a></li>
