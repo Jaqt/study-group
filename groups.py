@@ -50,6 +50,12 @@ def add_member(user_id, group_id):
     sql = "INSERT INTO users_groups (user_id, group_id) VALUES (?, ?)"
     db.execute(sql, [user_id, group_id])
 
+# remove member from group
+def remove_member(user_id, group_id):
+    sql = """DELETE FROM users_groups
+            WHERE users_groups.user_id = ? AND users_groups.group_id = ?"""
+    db.execute(sql, [user_id, group_id])
+
 # update group
 def update_group(group_id, group_name, description, max_members, subject):
     sql = """UPDATE groups SET group_name = ?,

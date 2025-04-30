@@ -76,6 +76,11 @@ def logout():
         del session["user_id"]
     return redirect("/")
 
+@app.route("/groups")
+def list_groups():
+    all_groups = groups.get_groups()
+    return render_template("/groups.html", groups=all_groups)
+
 @app.route("/create_group", methods=["GET", "POST"])
 @login_required
 def create_group():
@@ -158,10 +163,44 @@ def search_group():
     filter_groups = groups.filter_groups(query)
     return render_template("/groups.html", groups=filter_groups, query=query)
 
-@app.route("/groups")
-def list_groups():
-    all_groups = groups.get_groups()
-    return render_template("/groups.html", groups=all_groups)
+@app.route("/join_group/group_id=<int:group_id>", methods=["POST"])
+@login_required
+def join_group(group_id):
+    group_data = groups.get_group(group_id)
+    if not group_data:
+        abort(404)
+
+    members = groups.get_members(group_id)
+    for member in members:
+        if session["user_id"] == member[0]:
+            flash("You have already joined this group", "warning")
+            return redirect("/view/group_id=" + str(group_id))
+
+    if len(members) >= group_data["max_members"]:
+        flash("This group is full!", "warning")
+        return redirect("/view/group_id=" + str(group_id))
+
+    groups.add_member(session["user_id"], group_id)
+    flash("You have joined the group", "success")
+    return redirect("/view/group_id=" + str(group_id))
+
+@app.route("/leave_group/group_id=<int:group_id>", methods=["POST"])
+@login_required
+def leave_group(group_id):
+    group_data = groups.get_group(group_id)
+    if not group_data:
+        abort(404)
+    if group_data["owner"] == session["user_id"]:
+        abort(403)
+
+    members = groups.get_members(group_id)
+    for member in members:
+        if session["user_id"] == member[0]:
+            groups.remove_member(session["user_id"], group_id)
+            flash("You have left the group", "success")
+            return redirect("/view/group_id=" + str(group_id))
+
+    abort(403)
 
 @app.route("/view/group_id=<int:group_id>")
 @login_required
@@ -169,8 +208,14 @@ def view_group(group_id):
     group_data = groups.get_group(group_id)
     if not group_data:
         abort(404)
+
     members = groups.get_members(group_id)
-    return render_template("group_page.html", group=group_data, members=members)
+    is_member = False
+    for member in members:
+        if session["user_id"] == member[0]:
+            is_member = True
+    is_full = len(members) >= group_data["max_members"]
+    return render_template("group_page.html", group=group_data, members=members, is_member=is_member, is_full=is_full)
 
 @app.route("/edit/group_id=<int:group_id>")
 @login_required
