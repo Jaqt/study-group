@@ -1,9 +1,13 @@
+import secrets
+
 from flask import Flask
 from flask import abort, flash, redirect, render_template, request, session
 from functools import wraps
+
 import config
 import db
-import groups, users
+import groups
+import users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -16,6 +20,12 @@ def login_required(f):
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
+
+def check_csrf():
+    if "csrf_token" not in request.form:
+        abort(403)
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)
 
 @app.route("/")
 def index():
@@ -67,6 +77,7 @@ def login():
 
         session["username"] = username
         session["user_id"] = user_id
+        session["csrf_token"] = secrets.token_hex(16)
         return redirect("/")
 
 @app.route("/logout")
@@ -74,6 +85,7 @@ def logout():
     if "user_id" in session:
         del session["username"]
         del session["user_id"]
+        del session["csrf_token"]
     return redirect("/")
 
 @app.route("/groups")
@@ -88,6 +100,7 @@ def create_group():
         return render_template("create_group.html")
 
     if request.method == "POST":
+        check_csrf()
         group_name = request.form["group_name"]
         if not group_name or len(group_name) > 50:
             abort(403)
@@ -110,6 +123,8 @@ def create_group():
 @app.route("/update_group", methods=["POST"])
 @login_required
 def update_group():
+    check_csrf()
+
     group_id = request.form["group_id"]
     group = groups.get_group(group_id)
     if not group:
@@ -141,6 +156,8 @@ def update_group():
 @app.route("/delete_group", methods=["POST"])
 @login_required
 def delete_group():
+    check_csrf()
+
     group_id = request.form["group_id"]
     group = groups.get_group(group_id)
     if not group:
@@ -166,6 +183,8 @@ def search_group():
 @app.route("/join_group/group_id=<int:group_id>", methods=["POST"])
 @login_required
 def join_group(group_id):
+    check_csrf()
+
     group_data = groups.get_group(group_id)
     if not group_data:
         abort(404)
@@ -187,6 +206,8 @@ def join_group(group_id):
 @app.route("/leave_group/group_id=<int:group_id>", methods=["POST"])
 @login_required
 def leave_group(group_id):
+    check_csrf()
+
     group_data = groups.get_group(group_id)
     if not group_data:
         abort(404)

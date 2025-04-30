@@ -30,6 +30,7 @@
       <option value="lama">lama</option>
     </select>
   </p>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <input type="submit" name="update" value="Update" />
   <input type="submit" name="cancel" value="Cancel" />
 </form>

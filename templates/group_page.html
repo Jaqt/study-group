@@ -25,10 +25,12 @@
 {% else %}
   {% if is_member %}
     <form action="/leave_group/group_id={{ group.id }}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <button type="submit" class="button">Leave group</button>
     </form>
   {% else %}
     <form action="/join_group/group_id={{ group.id }}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <button type="submit" class="button" {% if is_full %}disabled{% endif %}>Join group</button>
     </form>
     {% if is_full %}
