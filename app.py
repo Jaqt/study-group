@@ -29,7 +29,10 @@ def check_csrf():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    my_groups = None
+    if "user_id" in session:
+        my_groups = users.get_groups(session["user_id"])
+    return render_template("index.html", groups=my_groups)
 
 @app.route("/register")
 def register():

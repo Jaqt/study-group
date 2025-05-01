@@ -41,7 +41,7 @@
 <p>
   {{ group.description }}
 </p>
-<h3>Members</h3>
+<h3>{{ members | count }}/{{ group.max_members }} members</h3>
 <ul style="list-style-type:none;">
   {% for member in members %}
   <li><a href="/view/user_id={{ member.id }}">{{ member.username }}</a></li>

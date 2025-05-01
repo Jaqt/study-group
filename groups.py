@@ -1,16 +1,32 @@
 import db
 
-# Listing of all groups in db
+# List of all groups in db (group data, member count)
 def get_groups():
-    sql = "SELECT id, group_name, description, subject FROM groups ORDER BY id DESC"
+    sql = """SELECT groups.id,
+                    groups.group_name,
+                    groups.description,
+                    groups.max_members,
+                    groups.subject,
+                    COUNT(users_groups.user_id) AS member_count
+            FROM groups
+            LEFT JOIN users_groups ON users_groups.group_id = groups.id
+            GROUP BY groups.id
+            ORDER BY groups.id DESC"""
     return db.query(sql)
 
-# Get filtered groups by keywords
+# Get groups that match users search input (group data, member count)
 def filter_groups(query):
-    sql = """SELECT id, group_name, description, subject
+    sql = """SELECT groups.id,
+                    groups.group_name,
+                    groups.description,
+                    groups.max_members,
+                    groups.subject,
+                    COUNT(users_groups.user_id) AS member_count
             FROM groups
-            WHERE group_name LIKE ? OR description LIKE ?
-            ORDER BY id DESC"""
+            LEFT JOIN users_groups ON users_groups.group_id = groups.id
+            WHERE groups.group_name LIKE ? OR groups.description LIKE ?
+            GROUP BY groups.id
+            ORDER BY groups.id DESC"""
     keywords = f"%{query}%"
     return db.query(sql, [keywords, keywords])
 

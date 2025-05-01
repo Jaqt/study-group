@@ -22,6 +22,19 @@
   <a href="/create_group">Create a new group</a> or 
   <a href="/groups">Look for groups</a>
 </p>
+<h2>My groups</h2>
+  {% if groups %}
+    {% for group in groups %}
+    <div class="group">
+      <dt><a href="/view/group_id={{ group.id }}">{{ group.group_name }}</a>
+         - {{ group.member_count }}/{{ group.max_members}} members</dt>
+      <i>{{ group.subject }}</i>
+      <dd>{{ group.description }}</dd>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p>You have not joined to any groups yet</p>
+  {% endif %}
 {% else %}
 <h2>Welcome to Study group!</h2>
 <p>

@@ -45,10 +45,19 @@ def get_owner(user_id):
 
 # Get groups which user is currently member of
 def get_groups(user_id):
-    sql = """SELECT groups.id, groups.group_name
-            FROM groups, users_groups
-            WHERE users_groups.user_id = ?
-            AND groups.id = users_groups.group_id"""
+    sql = """SELECT groups.id,
+                    groups.group_name,
+                    groups.description,
+                    groups.max_members,
+                    groups.subject,
+                    (SELECT COUNT(*)
+                    FROM users_groups
+                    WHERE users_groups.group_id = groups.id
+                    ) AS member_count
+            FROM groups
+            LEFT JOIN users_groups ON users_groups.group_id = groups.id
+            WHERE users_groups.user_id = ? AND groups.id = users_groups.group_id
+            ORDER BY groups.id DESC"""
     return db.query(sql, [user_id])
 
 # Get subjects of the groups user is part of
