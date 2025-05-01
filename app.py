@@ -3,6 +3,7 @@ import secrets
 from flask import Flask
 from flask import abort, flash, redirect, render_template, request, session
 from functools import wraps
+import markupsafe
 
 import config
 import db
@@ -26,6 +27,12 @@ def check_csrf():
         abort(403)
     if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
+
+@app.template_filter()
+def show_lines(content):
+    content = str(markupsafe.escape(content))
+    content = content.replace("\n", "<br />")
+    return markupsafe.Markup(content)
 
 @app.route("/")
 def index():

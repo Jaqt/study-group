@@ -29,7 +29,7 @@
       <dt><a href="/view/group_id={{ group.id }}">{{ group.group_name }}</a>
          - {{ group.member_count }}/{{ group.max_members}} members</dt>
       <i>{{ group.subject }}</i>
-      <dd>{{ group.description }}</dd>
+      <dd>{{ group.description | show_lines }}</dd>
     </div>
     {% endfor %}
   {% else %}
