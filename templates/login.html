@@ -26,12 +26,12 @@
 {% else %}
 <form action="/login" method="post">
   <p>
-    Username: <br />
-    <input type="text" name="username" maxlength="16" required/>
+    <label for="username">Username</label>:<br />
+    <input type="text" id="username" name="username" maxlength="16" required/>
   </p>
   <p>
-    Password: <br />
-    <input type="password" name="password" maxlength="128" required/>
+    <label for="password">Password</label>:<br />
+    <input type="password" id="password" name="password" maxlength="128" required/>
   </p>
   <input type="submit" value="Login" />
 </form>

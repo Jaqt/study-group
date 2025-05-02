@@ -18,16 +18,16 @@
 
 <form action="/create_account" method="post">
   <p>
-    Account name: <br />
-    <input type="text" name="username" value="{{ filled.username }}" maxlength="16" required/>
+    <label for="username">Username</label>:<br />
+    <input type="text" id="username" name="username" value="{{ filled.username }}" maxlength="16" required/>
   </p>
   <p>
-    Password: <br />
-    <input type="password" name="password1" maxlength="128" required/>
+    <label for="password1">Password</label>:<br />
+    <input type="password" id="password1" name="password1" maxlength="128" required/>
   </p>
   <p>
-    Password again: <br />
-    <input type="password" name="password2" maxlength="128" required/>
+    <label for="password2">Password again</label>:<br />
+    <input type="password" id="password2" name="password2" maxlength="128" required/>
   </p>
   <input type="submit" value="Create account" />
 </form>
