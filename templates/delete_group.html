@@ -13,8 +13,8 @@
 <form action="/delete_group" method="post">
   <p>
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" name="delete" value="Yes, I am sure"/>
-    <input type="submit" name="cancel" value="Cancel"/>
+    <input type="submit" name="delete" value="Yes, I am sure" class="button danger" />
+    <input type="submit" name="cancel" value="Cancel" class="button" />
     <input type="hidden" name="group_id" value="{{ group_id }}"/>
   </p>
 </form>

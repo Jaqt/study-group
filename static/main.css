@@ -48,6 +48,14 @@ body {
   opacity: 0.6;
 }
 
+.button.danger {
+  background-color: #bd3829;
+}
+
+.button.danger:hover {
+  background-color: #e74c3c;
+}
+
 .group {
   border: 2px solid black;
   margin: 1em;
