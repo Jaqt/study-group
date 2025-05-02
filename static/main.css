@@ -54,6 +54,17 @@ body {
   padding: 0.2em 0.5em;
 }
 
+.group dd {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.description {
+  border: 2px solid white;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 h1, h2 {
   margin: 0;
 }

@@ -38,9 +38,9 @@
     {% endif %}
   {% endif %}
 {% endif %}
-<p>
+<div class="description">
   {{ group.description | show_lines}}
-</p>
+</div>
 <h3>{{ members | count }}/{{ group.max_members }} members</h3>
 <ul style="list-style-type:none;">
   {% for member in members %}
