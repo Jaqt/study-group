@@ -50,5 +50,36 @@
 <p>
   <a href="/groups" class="button">Back to groups</a>
 </p>
+<h2>Messages</h2>
+{% if is_member %}
+<form action="/new_message" method="post">
+  <div class="message-box">
+    <textarea name="message" rows="3" cols="30"
+    maxlength="140" placeholder="Write a message..." required></textarea>
+    <button type="submit" class="button">Send message</button>
+  </div>
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+  <input type="hidden" name="group_id" value="{{ group.id }}" />
+</form>
+  {% if group_messages %}
+    <div class="messages">
+      <ul style="list-style-type:none;">
+        {% for message in group_messages %}
+          <li>
+            <b><a href="/view/user_id={{ message.user_id }}">{{ message.username }}</a></b>
+            - {{ message.time }} UTC
+            <p>{{ message.message | show_lines }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+  </div>
+  {% else %}
+    <p>No messages sent yet</p>
+  {% endif %}
+{% else %}
+<p>
+  You need to be a member of this group to see messages
+</p>
+{% endif %}
 
 {% endblock %}

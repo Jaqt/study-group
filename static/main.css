@@ -73,6 +73,39 @@ body {
   word-break: break-word;
 }
 
+.messages {
+  border: 2px solid black;
+  margin: 1em;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.messages ul {
+  list-style: none;
+  margin: 1em;
+  padding: 0;
+}
+
+.messages li {
+  padding: 0.5em 0;
+  border-bottom: 1px solid #797878;
+}
+
+.messages li:last-of-type {
+  border-bottom: none;
+}
+
+.message-box {
+  display: flex;
+  align-items: flex-start;
+  margin: 0.5em;
+}
+
+.message-box textarea {
+  flex: 1 1 auto;
+  resize: vertical;
+}
+
 h1, h2 {
   margin: 0;
 }

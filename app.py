@@ -9,6 +9,7 @@ import config
 import db
 import groups
 import users
+import messages
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -190,6 +191,31 @@ def search_group():
     filter_groups = groups.filter_groups(query)
     return render_template("/groups.html", groups=filter_groups, query=query)
 
+@app.route("/new_message", methods=["POST"])
+@login_required
+def new_message():
+    check_csrf()
+
+    group_id = int(request.form["group_id"])
+    if not group_id:
+        abort(403)
+    message = request.form["message"].strip()
+    if not message or len(message) > 140:
+        abort(403)
+
+    members = groups.get_members(group_id)
+    is_member = False
+    for member in members:
+        if session["user_id"] == member[0]:
+            is_member = True
+
+    if not is_member:
+        abort(403)
+
+    messages.new_message(session["user_id"], group_id, message)
+
+    return redirect("/view/group_id=" + str(group_id))
+
 @app.route("/join_group/group_id=<int:group_id>", methods=["POST"])
 @login_required
 def join_group(group_id):
@@ -245,8 +271,9 @@ def view_group(group_id):
     for member in members:
         if session["user_id"] == member[0]:
             is_member = True
+    group_messages = messages.get_messages(group_id)
     is_full = len(members) >= group_data["max_members"]
-    return render_template("group_page.html", group=group_data, members=members, is_member=is_member, is_full=is_full)
+    return render_template("group_page.html", group=group_data, members=members, group_messages=group_messages, is_member=is_member, is_full=is_full)
 
 @app.route("/edit/group_id=<int:group_id>")
 @login_required
