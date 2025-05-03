@@ -301,7 +301,9 @@ def view_user(user_id):
     user = users.get_user(user_id)
     if not user:
         abort(404)
+
+    group_messages = messages.users_messages(user_id)
     owner = users.get_owner(user_id)
     groups = users.get_groups(user_id)
     subjects = users.get_subjects(user_id)
-    return render_template("user_page.html", user=user, owner=owner, groups=groups, subjects=subjects)
+    return render_template("user_page.html", user=user, group_messages=group_messages, owner=owner, groups=groups, subjects=subjects)
