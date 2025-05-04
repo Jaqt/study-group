@@ -1,8 +1,8 @@
 import secrets
+from functools import wraps
 
 from flask import Flask
 from flask import abort, flash, redirect, render_template, request, session
-from functools import wraps
 import markupsafe
 
 import config
@@ -12,7 +12,7 @@ import users
 import messages
 
 app = Flask(__name__)
-app.secret_key = config.secret_key
+app.secret_key = config.SECRET_KEY
 
 def login_required(f):
     @wraps(f)
@@ -145,16 +145,16 @@ def update_group():
 
     group_name = request.form["group_name"]
     if not group_name or len(group_name) > 50:
-            abort(403)
+        abort(403)
     description = request.form["description"]
     if not description or len(description) > 1000:
-            abort(403)
+        abort(403)
     max_members = request.form["max_members"]
     if not max_members or int(max_members) < 1 or int(max_members) > 32:
-            abort(403)
+        abort(403)
     subject = request.form["subject"]
     if not groups.valid_subjects(subject):
-            abort(403)
+        abort(403)
 
     if "cancel" in request.form:
         return redirect("/view/group_id=" + str(group_id))
@@ -172,7 +172,7 @@ def delete_group():
     group_id = request.form["group_id"]
     group = groups.get_group(group_id)
     if not group:
-       abort(404)
+        abort(404)
     if group["owner"] != session["user_id"]:
         abort(403)
 
@@ -273,7 +273,9 @@ def view_group(group_id):
             is_member = True
     group_messages = messages.get_messages(group_id)
     is_full = len(members) >= group_data["max_members"]
-    return render_template("group_page.html", group=group_data, members=members, group_messages=group_messages, is_member=is_member, is_full=is_full)
+    return render_template("group_page.html", group=group_data, members=members,
+                           group_messages=group_messages, is_member=is_member,
+                           is_full=is_full)
 
 @app.route("/edit/group_id=<int:group_id>")
 @login_required
@@ -304,6 +306,7 @@ def view_user(user_id):
 
     group_messages = messages.users_messages(user_id)
     owner = users.get_owner(user_id)
-    groups = users.get_groups(user_id)
+    users_groups = users.get_groups(user_id)
     subjects = users.get_subjects(user_id)
-    return render_template("user_page.html", user=user, group_messages=group_messages, owner=owner, groups=groups, subjects=subjects)
+    return render_template("user_page.html", user=user, group_messages=group_messages,
+                           owner=owner, users_groups=users_groups, subjects=subjects)
