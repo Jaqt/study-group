@@ -1,9 +1,11 @@
 import secrets
 import math
+import time
 from functools import wraps
 
+
 from flask import Flask
-from flask import abort, flash, redirect, render_template, request, session
+from flask import abort, flash, redirect, render_template, request, session, g
 import markupsafe
 
 import config
@@ -14,6 +16,16 @@ import messages
 
 app = Flask(__name__)
 app.secret_key = config.SECRET_KEY
+
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+
+@app.after_request
+def after_request(response):
+    elapsed_time = round(time.time() - g.start_time, 2)
+    print("elapsed time:", elapsed_time, "s")
+    return response
 
 def login_required(f):
     @wraps(f)
