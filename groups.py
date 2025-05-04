@@ -1,7 +1,7 @@
 import db
 
 # List of all groups in db (group data, member count)
-def get_groups():
+def get_groups(page, page_size):
     sql = """SELECT groups.id,
                     groups.group_name,
                     groups.description,
@@ -11,8 +11,16 @@ def get_groups():
             FROM groups
             LEFT JOIN users_groups ON users_groups.group_id = groups.id
             GROUP BY groups.id
-            ORDER BY groups.id DESC"""
-    return db.query(sql)
+            ORDER BY groups.id DESC
+            LIMIT ? OFFSET ?"""
+    limit = page_size
+    offset = page_size * (page - 1)
+    return db.query(sql, [limit, offset])
+
+# Get count of all groups
+def group_count():
+    sql = "SELECT COUNT(*) FROM groups"
+    return db.query(sql)[0][0]
 
 # Get groups that match users search input (group data, member count)
 def filter_groups(query):

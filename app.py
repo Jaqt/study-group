@@ -1,4 +1,5 @@
 import secrets
+import math
 from functools import wraps
 
 from flask import Flask
@@ -100,9 +101,28 @@ def logout():
     return redirect("/")
 
 @app.route("/groups")
-def list_groups():
-    all_groups = groups.get_groups()
-    return render_template("/groups.html", groups=all_groups)
+@app.route("/groups/<int:page>")
+def list_groups(page=1):
+    page_size = 10
+    group_count = groups.group_count()
+    page_count = math.ceil(group_count / page_size)
+    page_count = max(page_count, 1)
+
+    if page < 1:
+        return redirect("/groups/1")
+    if page > page_count:
+        return redirect("/groups/" + str(page_count))
+
+    all_groups = groups.get_groups(page, page_size)
+    return render_template("/groups.html", groups=all_groups, page=page, page_count=page_count)
+
+@app.route("/search_group")
+def search_group():
+    query = request.args.get("query")
+    if not query:
+        return redirect("/groups/1")
+    filter_groups = groups.filter_groups(query)
+    return render_template("/groups.html", groups=filter_groups, query=query)
 
 @app.route("/create_group", methods=["GET", "POST"])
 @login_required
@@ -182,14 +202,6 @@ def delete_group():
         return redirect("/")
 
     return redirect("/view/group_id=" + str(group_id))
-
-@app.route("/search_group")
-def search_group():
-    query = request.args.get("query")
-    if not query:
-        query = ""
-    filter_groups = groups.filter_groups(query)
-    return render_template("/groups.html", groups=filter_groups, query=query)
 
 @app.route("/new_message", methods=["POST"])
 @login_required

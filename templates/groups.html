@@ -6,6 +6,15 @@
 
 <h2>Groups</h2>
 
+{% if groups and not query %}
+<p>
+  <a href="/groups/{{ page - 1 }}">&lt;&lt;</a>
+  Page {{ page }}/{{ page_count }}
+  <a href="/groups/{{ page + 1 }}">&gt;&gt;</a>
+</p>
+<hr />
+{% endif %}
+
 {% if groups %}
 <dl>
   {% for group in groups %}
