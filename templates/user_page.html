@@ -29,7 +29,7 @@
 <h2>Groups by subject</h2>
 <ul style="list-style-type:none;">
   {% for subject, count in subjects %}
-  <li>{{ subject }}: {{ count }} ryhmä{{ 'ä' if count != 1 else '' }}</li>
+  <li>{{ subject }}: {{ count }} group{{ 's' if count != 1 else '' }}</li>
   {% else %}
   <p>No subjects found</p>
   {% endfor %}
