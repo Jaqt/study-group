@@ -17,7 +17,7 @@
 <h1>Profile of {{ user.username }}</h1>
 <p>Groups founded: {{ owner | count }}</p>
 <p>Messages sent: {{ group_messages | count }}</p>
-<p>Member of {{ users_groups | count }} group{{ 's' if groups | count != 1 else '' }}</p>
+<p>Member of {{ users_groups | count }} group{{ 's' if users_groups | count != 1 else '' }}</p>
 <h2>All {{ user.username}}'s groups</h2>
 <ul style="list-style-type:none;">
   {% for group in users_groups %}
