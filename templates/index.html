@@ -18,10 +18,6 @@
 <p>
   You are logged in as <a href="/view/user_id={{ session.user_id }}">{{ session.username }}</a>
 </p>
-<p>
-  <a href="/create_group">Create a new group</a> or 
-  <a href="/groups">Look for groups</a>
-</p>
 <h2>My groups</h2>
   {% if groups %}
     {% for group in groups %}
@@ -44,9 +40,5 @@
   Already have an account? <a href="/login">Log in</a> to join with your friends. New here? <a href="/register">Create an account</a> and get started!
 </p>
 {% endif %}
-<form class="search" action="/search_group">
-  <input type="text" name="query" placeholder="Search groups..." />
-  <button type="submit"><i class="fa fa-search"></i></button>
-</form>
 
 {% endblock %}

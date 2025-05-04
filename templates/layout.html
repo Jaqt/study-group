@@ -19,11 +19,19 @@
     <nav>
       <ul>
         {% if session.user_id %}
-        <li><a href="/view/user_id={{ session.user_id }}" class="button">My profile</a></li>
-        <li><a href="/logout" class="button">Log out</a></li>
+        <li><a href="/create_group">Create group</a></li>
+        <li><a href="/groups">All groups</a></li>
+        <li>
+          <form class="search" action="/search_group">
+            <input type="text" name="query" placeholder="Search groups..." />
+            <button type="submit"><i class="fa fa-search"></i></button>
+          </form>
+        </li>
+        <li><a href="/view/user_id={{ session.user_id }}">My profile</a></li>
+        <li><a href="/logout">Log out</a></li>
         {% else %}
-        <li><a href="/login" class="button">Log in</a></li>
-        <li><a href="/register" class="button">Register</a></li>
+        <li><a href="/login">Log in</a></li>
+        <li><a href="/register">Register</a></li>
         {% endif %}
       </ul>
     </nav>

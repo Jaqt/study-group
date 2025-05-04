@@ -8,7 +8,6 @@ body {
   display: flex;
   align-items: center;
   background-color: #FFFFFF;
-  color: #A0A0A0;
   margin: 0 0 0.5em 0;
   padding: 1em;
 }
@@ -57,7 +56,7 @@ body {
 }
 
 .group {
-  border: 2px solid black;
+  border: 2px solid #777a7f;
   margin: 1em;
   padding: 0.2em 0.5em;
 }
@@ -74,7 +73,7 @@ body {
 }
 
 .messages {
-  border: 2px solid black;
+  border: 2px solid #777a7f;
   margin: 1em;
   overflow-wrap: break-word;
   word-break: break-word;
@@ -107,6 +106,7 @@ body {
 }
 
 h1, h2 {
+  color: #0C1E32;
   margin: 0;
 }
 
@@ -123,6 +123,33 @@ nav li {
   display: inline-block;
   padding: 0 1em;
   margin: 0;
+}
+
+nav a{
+  position: relative;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: .85em;
+  color: #0C1E32;
+  text-decoration: none;
+  padding: 1em 0;
+}
+
+nav a::after{
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: .35rem;
+  width: 0;
+  height: 2px;
+  background: #0C1E32;
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+nav a:hover::after{
+  width: 3em;
 }
 
 nav li:not(:first-of-type) {
@@ -152,7 +179,7 @@ nav li:not(:first-of-type) {
 .search input[type="text"] {
   padding: 0.5em;
   font-size: 14px;
-  border: 1px solid grey;
+  border: 1px solid #777a7f;
   border-right: none;
   height: 32px;
   box-sizing: border-box;
@@ -164,7 +191,7 @@ nav li:not(:first-of-type) {
   background: #0C1E32;
   color: white;
   font-size: 14px;
-  border: 1px solid grey;
+  border: 1px solid #777a7f;
   border-left: none;
   cursor: pointer;
   height: 32px;
