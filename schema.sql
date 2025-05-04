@@ -26,3 +26,9 @@ CREATE TABLE messages(
     message TEXT,
     time TEXT
 );
+
+CREATE INDEX idx_groups_owner ON groups(owner);
+CREATE INDEX idx_users_groups_group ON users_groups(group_id);
+CREATE INDEX idx_users_groups_user_group ON users_groups(user_id, group_id);
+CREATE INDEX idx_messages_group_time ON messages(group_id, time DESC);
+CREATE INDEX idx_messages_user_time ON messages(user_id, time DESC);
